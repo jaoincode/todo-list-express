@@ -1,5 +1,7 @@
 const express = require('express');
 const checkListRouter = require('./src/routes/checklist');
+// rodar o arquivo de config da db
+require('./config/database');
 
 const app = express();
 
