@@ -6,31 +6,40 @@ const Checklist = require('../models/checklist');
 
 router.get('/', async (req, res) => {
   try {
-    const checklists = await Checklist.find({}); // => busca as coisas do mongo
-    res.status(200).json(checklists);
+    const checklists = await Checklist.find({});
+    res.status(200).render('checklists/index', { checklists });
   } catch (err) {
-    res.status(422).json(err);
+    res.status(422).render('pages/error', { error: 'Erro ao exibir as listas'});
   }
 })
 
 router.post('/', async (req, res) => {
-  const { name } = req.body;
+  const { name } = req.body.checklist;
+  const checklist = new Checklist({name});
+  
   try {
-    // criando uma checklist com o nome passado no body
-    const checklists = await Checklist.create({name});
-    res.status(200).json(checklists);
+    await Checklist.save();
+    res.redirect('/checklists');
   } catch (err) {
-    res.status(422).json(err);
+    res.status(500).render('pages/error', {error: 'Erro ao criar checklist'});
   } 
 })
 
-// recebendo parametros
 router.get('/:id', async (req, res) => {
   try {
-    const checklist = await Checklist.findById(req.params.id);
-    res.status(200).json(checklist);
+    let checklist = await Checklist.findById(req.params.id);
+    res.status(200).render('checklists/show', { checklist })
+  } catch (error) {
+    res.status(500).render('pages/error', {error: 'Erro ao exibir as Listas de tarefas'});
+  }
+})
+
+router.get('/new', async (req, res) => {
+  try {
+    const checklist = new Checklist();
+    res.status(200).render('checklists/new', { checklist });
   } catch (err) {
-    res.status(422).json(err);
+    res.status(500).render('pages/error', { errors: 'Erro ao carregar o formulário'}); 
   }
 })
 
