@@ -1,4 +1,3 @@
-
 <%- include('../layouts/header', {title: 'Lista de tarefas'}) %>
 
 <%- include('../layouts/menu') %>
@@ -7,7 +6,7 @@
   <div class="container">
     <h1 class="title size-4">Nova Lista</h1>
 
-    <%- include('form', {method: 'post', url: '/checklists', checklist}) %>
+    <%- include('form', {method: 'post', url: '/checklists?_method=post', checklist: checklist}) %>
   </div>
 </section>
 
